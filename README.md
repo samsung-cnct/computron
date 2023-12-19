@@ -25,10 +25,11 @@ pip install -e alpa_serve/
 pip install ray
 
 pip install -e .
-
-## ensure to use c++17 for cuda 
 ```
-(computron) vmuser@yb-dev-1:/data/computron_paper/energonai$ git diff
+
+## Once you built energonai, ensure to use c++17 for cuda
+```shell
+(computron) vmuser@yb-dev-1:/data/computron/energonai$ git diff
 diff --git a/setup.py b/setup.py
 index 5160cc4..4ee86e7 100644
 --- a/setup.py
@@ -42,6 +43,6 @@ index 5160cc4..4ee86e7 100644
              '-U__CUDA_NO_HALF2_OPERATORS__', '-DTHRUST_IGNORE_CUB_VERSION_CHECK'
          ]
          ext_modules.append(
-(computron) vmuser@yb-dev-1:```
+(computron) vmuser@yb-dev-1:
 ```
 
