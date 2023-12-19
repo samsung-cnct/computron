@@ -17,8 +17,31 @@ Create an environment, install torch and Colossal-AI from PIP, then install Ener
 ```shell
 conda create -n computron python=3.10
 conda activate computron
-pip install torch==1.13 torchvision colossalai transformers
+pip install torch torchvision colossalai transformers
 pip install -e energonai/
 pip install -e alpa_serve/
+
+## In order to run sim.py, ray is needed
+pip install ray
+
 pip install -e .
+
+## ensure to use c++17 for cuda 
 ```
+(computron) vmuser@yb-dev-1:/data/computron_paper/energonai$ git diff
+diff --git a/setup.py b/setup.py
+index 5160cc4..4ee86e7 100644
+--- a/setup.py
++++ b/setup.py
+@@ -126,7 +126,7 @@ if build_cuda_ext:
+             cc_flag.append('arch=compute_80,code=sm_80')
+
+         extra_cuda_flags = [
+-            '-std=c++14', '-U__CUDA_NO_HALF_OPERATORS__', '-U__CUDA_NO_HALF_CONVERSIONS__',
++            '-std=c++17', '-U__CUDA_NO_HALF_OPERATORS__', '-U__CUDA_NO_HALF_CONVERSIONS__',
+             '-U__CUDA_NO_HALF2_OPERATORS__', '-DTHRUST_IGNORE_CUB_VERSION_CHECK'
+         ]
+         ext_modules.append(
+(computron) vmuser@yb-dev-1:```
+```
+

@@ -136,8 +136,9 @@ class Worker:
         self.logger = get_dist_logger("computron")
         if log_dir is not None:
             self.logger.log_to_file(log_dir, mode="w", suffix=self.rpc_name)
-        self.logger.info(f"{self.rpc_name} started")
+        # self.logger.info(f"{self.rpc_name} starting")
         self._start()
+      #  self.logger.info(f"{self.rpc_name} started")
 
     @contextmanager
     def _lifespan(self):
@@ -150,12 +151,18 @@ class Worker:
         with self._lifespan():
             while True:
                 try:
+                   # self.logger.info(f"Entering try block")
                     entry = self.input_pipe.recv_nowait()
+                   # self.logger.info(f"Received entry from pipe {entry}")
+
                     if isinstance(entry, TaskEntry):
+                    #    self.logger.info(f"Entering TaskEntry block")
                         with torch.inference_mode():
                             outputs = self._forward(entry.model_id, entry.batch)
                         self.output_pipe.send(TaskEntry(entry.uids, entry.model_id, outputs))
+                    #    self.logger.info(f"Exiting TaskEntry block")
                     elif isinstance(entry, LoadEntry):
+                    #    self.logger.info(f"Entering LoadEntry block")
                         if self.pp_rank < (self.pp_world_size - 1):
                             self.output_pipe.send(entry)
                         with torch.inference_mode():
@@ -166,6 +173,7 @@ class Worker:
                             #         self.models[entry.model_id].to("cpu", non_blocking=True)
                             # event = self.load_stream.record_event()
                             # self.wait_load_queue.put((entry, event))
+                      #      self.logger.info(f"Entering torch.inference_mode block")
                             if entry.load:
                                 with torch.cuda.stream(self.load_stream):
                                     self.models[entry.model_id].to("cuda", non_blocking=True)
@@ -176,7 +184,11 @@ class Worker:
                                     self.models[entry.model_id].to("cpu", non_blocking=True)
                                 event = self.offload_stream.record_event()
                                 self.wait_offload_queue.put((entry, event))
-                except RuntimeError:
+                       #     self.logger.info(f"Exiting torch.inference_mode block")
+                       # self.logger.info(f"Exiting LoadEntry block")
+                   # self.logger.info(f"Exiting try block")
+                except RuntimeError as er:
+      #              self.logger.info(f"caught runtime error {er}")
                     time.sleep(0.01)
 
     def _shutdown(self) -> None:
