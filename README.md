@@ -17,7 +17,7 @@ Create an environment, install torch and Colossal-AI from PIP, then install Ener
 ```shell
 conda create -n computron python=3.10
 conda activate computron
-pip install torch torchvision colossalai transformers
+pip install torch torchvision colossalai==0.3.2 transformers
 pip install -e energonai/
 pip install -e alpa_serve/
 
