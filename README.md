@@ -1,4 +1,5 @@
 # Computron
+Forked from https://github.com/dlzou/computron/tree/master/computron
 
 ## Abstract
 
@@ -9,7 +10,7 @@ Many of the most performant deep learning models today in fields like language a
 Clone this repository and its submodules:
 
 ```shell
-git clone --recurse-submodules git@github.com:dlzou/computron.git
+git clone --recurse-submodules git@github.com:samsung-cnct/computron
 ```
 
 Create an environment, install torch and Colossal-AI from PIP, then install Energon-AI and AlpaServe from the included submodules. Finally, install Computron from source.
